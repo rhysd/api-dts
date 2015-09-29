@@ -5,10 +5,10 @@
 `api-dts` is a generator for TypeScript programmer who use some JSON APIs.  API response JSON has too many fields to write the type definition for it manually.  `api-dts` generates such an annoying type definition automatically.
 
 ```
-api-dts [-f {file}]
+$ api-dts < response.json > api.d.ts
 ```
 
-When no option is specified, `api-dts` simply reads STDIN and writes result to STDOUT.  If `-f` is specified, `api-dts` finds the file and reads it.
+`api-dts` simply reads STDIN and writes result to STDOUT.
 You can install `api-dts` with `go get`.
 
 ```
