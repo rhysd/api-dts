@@ -3,8 +3,15 @@ package apidts
 import (
 	"bytes"
 	"fmt"
-	"os"
 )
+
+type StringizeError struct {
+	token TypeToken
+}
+
+func (e *StringizeError) Error() string {
+	return fmt.Sprintf("Invalid type token: Input must be object or array of object but token was %s", e.token)
+}
 
 // TODO: Add indent string customization
 type DtsStringizer struct {
@@ -60,23 +67,26 @@ func (s *DtsStringizer) visit(dts *TypeScriptDef) {
 	}
 }
 
-func (s *DtsStringizer) Stringize(dts *TypeScriptDef) string {
+func (s *DtsStringizer) Stringize(dts *TypeScriptDef) (string, error) {
 	if dts.token == TypeArray {
 		return s.Stringize(dts.elem_type)
 	}
 
 	if dts.token != TypeObject {
-		fmt.Fprintln(os.Stderr, "Input must be object or array of object.")
-		os.Exit(1)
+		return "", &StringizeError{dts.token}
 	}
 
 	s.writeIndent()
 	s.write("interface FixMe ")
 	s.visit(dts)
-	return s.buffer.String()
+	return s.buffer.String(), nil
 }
 
-func StringizeDts(dts *TypeScriptDef) string {
+func StringizeDts(dts *TypeScriptDef) (string, error) {
 	s := NewDtsStringizer()
-	return (&s).Stringize(dts)
+	r, err := (&s).Stringize(dts)
+	if err != nil {
+		return "", err
+	}
+	return r, nil
 }

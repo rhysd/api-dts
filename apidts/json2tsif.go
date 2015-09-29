@@ -2,9 +2,7 @@ package apidts
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
-	"os"
 )
 
 type TypeToken uint
@@ -73,11 +71,10 @@ func convertToDef(val interface{}) *TypeScriptDef {
 	}
 }
 
-func ConvertJsonToDts(input io.Reader) *TypeScriptDef {
+func ConvertJsonToDts(input io.Reader) (*TypeScriptDef, error) {
 	var decoded interface{}
 	if err := json.NewDecoder(input).Decode(&decoded); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+		return nil, err
 	}
-	return convertToDef(decoded)
+	return convertToDef(decoded), nil
 }

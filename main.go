@@ -33,7 +33,20 @@ func ParseArgv() io.Reader {
 
 func main() {
 	target := ParseArgv()
-	dts := apidts.ConvertJsonToDts(target)
-	stringized := apidts.StringizeDts(dts)
+
+	var err error
+
+	dts, err := apidts.ConvertJsonToDts(target)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err.Error())
+		os.Exit(1)
+	}
+
+	stringized, err := apidts.StringizeDts(dts)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err.Error())
+		os.Exit(1)
+	}
+
 	fmt.Println(stringized)
 }
