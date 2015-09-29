@@ -77,7 +77,7 @@ func (s *DtsStringizer) Stringize(dts *TypeScriptDef) (string, error) {
 	}
 
 	s.writeIndent()
-	s.write("interface FixMe ")
+	s.write("interface FixMe")
 	s.visit(dts)
 	return s.buffer.String(), nil
 }
