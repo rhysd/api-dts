@@ -57,6 +57,8 @@ You can save it to `{api}.d.ts` and rename `FixMe` to the name of API.
 
 ## TODO
 
+- Add `-o`(`--out`) option and make name of the interface from it.
+- Seprate sub interfaces.  Their names are made using the key names of them.
 - Detect optional field (suffix `?`)
 - When the JSON is an array, check all elements have the same interface
 
