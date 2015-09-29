@@ -24,18 +24,18 @@ Assume that below JSON is API response.
   {
     "user": {
       "name": "rhysd",
-      "kind": "dog",
+      "age": 27,
       "lang": "Dachs"
     },
-    "progress": "bad"
+    "has_progress": false
   },
   {
     "user": {
       "name": "linda",
-      "kind": "cat",
+      "age": 24,
       "lang": "scala"
     },
-    "progress": "not bad"
+    "has_progress": true
   }
 ]
 ```
@@ -45,11 +45,11 @@ Assume that below JSON is API response.
 ```typescript
 interface FixMe  {
   user: {
-    kind: string;
+    age: number;
     lang: string;
     name: string;
   };
-  progress: string;
+  progress: boolean;
 }
 ```
 
