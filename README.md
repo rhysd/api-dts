@@ -14,6 +14,46 @@ You can install `api-dts` with `go get`.
 go get github.com/rhysd/api-dts
 ```
 
+## Example
+
+Assume that below JSON is API response.
+
+```json
+[
+  {
+    "user": {
+      "name": "rhysd",
+      "kind": "dog",
+      "lang": "Dachs"
+    },
+    "progress": "bad"
+  },
+  {
+    "user": {
+      "name": "linda",
+      "kind": "cat",
+      "lang": "scala"
+    },
+    "progress": "not bad"
+  }
+]
+```
+
+`api-dts` generates below type definition.
+
+```typescript
+interface FixMe  {
+  user: {
+    kind: string;
+    lang: string;
+    name: string;
+  };
+  progress: string;
+}
+```
+
+You can save it to `{api}.d.ts` and rename `FixMe` to the name of API.
+
 ## TODO
 
 - Detect optional field (suffix `?`)
