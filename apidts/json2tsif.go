@@ -56,30 +56,6 @@ func convertToObjDef(m map[string]interface{}) *TypeScriptDef {
 	return def
 }
 
-func _convertToDef(val interface{}) *TypeScriptDef {
-	if _, ok := val.(bool); ok {
-		return NewTypeScriptDef(TypeBoolean)
-	}
-
-	if _, ok := val.(float64); ok {
-		return NewTypeScriptDef(TypeNumber)
-	}
-
-	if _, ok := val.(string); ok {
-		return NewTypeScriptDef(TypeString)
-	}
-
-	if a, ok := val.([]interface{}); ok {
-		return convertToArrayDef(a)
-	}
-
-	if m, ok := val.(map[string]interface{}); ok {
-		return convertToObjDef(m)
-	}
-
-	return NewTypeScriptDef(TypeNull)
-}
-
 func convertToDef(val interface{}) *TypeScriptDef {
 	switch t := val.(type) {
 	case bool:
