@@ -7,6 +7,36 @@ import (
 	"unicode"
 )
 
+type InterfaceStack struct {
+	buf []string
+}
+
+func newInterfaceStack() *InterfaceStack {
+	s := InterfaceStack{}
+	s.buf = make([]string, 0, 16)
+	return &s
+}
+
+func (s *InterfaceStack) push(name string) {
+	s.buf = append(s.buf, name)
+}
+
+func (s *InterfaceStack) top() string {
+	return s.buf[len(s.buf)-1]
+}
+
+func (s *InterfaceStack) pop() {
+	s.buf = s.buf[:len(s.buf)-1]
+}
+
+func (s *InterfaceStack) getCurrentName() string {
+	return strings.Join(s.buf, "")
+}
+
+func (s *InterfaceStack) clear() {
+	s.buf = make([]string, 0, 16)
+}
+
 type StringizeError struct {
 	token TypeToken
 }
@@ -35,13 +65,14 @@ func camelize(str string) string {
 
 // TODO: Add indent string customization
 type DtsStringizer struct {
-	counter uint
-	indent  uint
-	buffer  bytes.Buffer
+	counter    uint
+	indent     uint
+	buffer     bytes.Buffer
+	interfaces *InterfaceStack
 }
 
 func NewDtsStringizer() DtsStringizer {
-	return DtsStringizer{0, 0, bytes.Buffer{}}
+	return DtsStringizer{0, 0, bytes.Buffer{}, newInterfaceStack()}
 }
 
 func (s *DtsStringizer) write(str string) {
@@ -52,6 +83,21 @@ func (s *DtsStringizer) writeIndent() {
 	for i := uint(0); i < s.indent; i++ {
 		s.write("  ")
 	}
+}
+
+func (s *DtsStringizer) visitObject(dts *TypeScriptDef) {
+	s.write(" {\n")
+	s.indent += 1
+	for n, f := range dts.fields {
+		s.writeIndent()
+		s.write(n)
+		s.write(":")
+		s.visit(f)
+		s.write(";\n")
+	}
+	s.indent -= 1
+	s.writeIndent()
+	s.write("}")
 }
 
 func (s *DtsStringizer) visit(dts *TypeScriptDef) {
@@ -66,18 +112,7 @@ func (s *DtsStringizer) visit(dts *TypeScriptDef) {
 		s.visit(dts.elem_type)
 		s.write("[]")
 	case TypeObject:
-		s.write(" {\n")
-		s.indent += 1
-		for n, f := range dts.fields {
-			s.writeIndent()
-			s.write(n)
-			s.write(":")
-			s.visit(f)
-			s.write(";\n")
-		}
-		s.indent -= 1
-		s.writeIndent()
-		s.write("}")
+		s.visitObject(dts)
 	case TypeNull:
 		s.write(" any")
 	case TypeUnknown:
@@ -108,7 +143,9 @@ func (s *DtsStringizer) Stringize(dts *TypeScriptDef, hint string) (string, erro
 	} else {
 		s.write("FixMe")
 	}
+
 	s.visit(dts)
+
 	return s.buffer.String(), nil
 }
 
