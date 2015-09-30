@@ -46,10 +46,16 @@ func TestStringizeDts(t *testing.T) {
 	check(`{"foo": [1, 2, 3]}`, `interface FixMe {
   foo: number[];
 }`)
-	check(`{"foo": {"piyo": "foo", "poyo": [1, 2, 3]}}`, `interface FixMe {
+	check(`{"foo": {"poyo": [1, 2, 3]}}`, `interface FixMe {
   foo: {
-    piyo: string;
     poyo: number[];
+  };
+}`)
+	check(`{"foo": {"poyo": {"puyo": [true]}}}`, `interface FixMe {
+  foo: {
+    poyo: {
+      puyo: boolean[];
+    };
   };
 }`)
 
