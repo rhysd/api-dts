@@ -5,10 +5,10 @@
 `api-dts` is a generator for TypeScript programmer who use some JSON APIs.  API response JSON has too many fields to write the type definition for it manually.  `api-dts` generates such an annoying type definition automatically.
 
 ```
-$ api-dts -out api.d.ts < response.json
+$ api-dts some-api.json > some-api.d.ts
 ```
 
-`api-dts` simply reads STDIN and writes result to the file specified with `-out`.  If `-out` is omitted, `api-dts` writes result to STDOUT.  `api-dts` defines interface name of the API from the specified file name, so specifying `-out` prefers to redirecting to file.
+`api-dts` reads JSON text from file specified as argument and simply writes the result to STDOUT.  If command argument is ommited, `api-dts` reads STDIN.  `api-dts` defines interface name of the API from the specified file name, so specifying `-out` prefers to redirecting to file.
 You can install `api-dts` with `go get`.
 
 ```
@@ -40,7 +40,7 @@ Assume that below JSON is API response.
 ]
 ```
 
-`$ api-dts -out my-api.d.ts < response.json` generates below type definition.
+`$ api-dts my-api.json > my-api.d.ts` generates below type definition.
 
 ```typescript
 interface MyApi {
@@ -55,7 +55,6 @@ interface MyApi {
 
 ## TODO
 
-- Add `-o`(`--out`) option and make name of the interface from it.
 - Seprate sub interfaces.  Their names are made using the key names of them.
 - Detect optional field (suffix `?`)
 - When the JSON is an array, check all elements have the same interface
@@ -466,13 +465,13 @@ Below is a response from Twitter API
 Then execute
 
 ```
-$ api-dts < response.json
+$ api-dts home-timeline.json
 ```
 
-It outputs type definition for the API.  You can save it to `{some-api}.d.ts`.  Left task is only to rename the name of interface.
+It outputs type definition for the API.  You can save it to `twitter-api.d.ts`.
 
 ```typescript
-interface FixMe  {
+interface HomeTimeline {
   in_reply_to_status_id: any;
   extended_entities: {
     media: {

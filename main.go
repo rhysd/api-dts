@@ -4,13 +4,13 @@ import (
 	"flag"
 	"fmt"
 	"github.com/rhysd/api-dts/apidts"
+	"io"
 	"os"
 )
 
-func ParseArgv() string {
-	fs := flag.NewFlagSet(os.Args[0], flag.ExitOnError)
+func ParseArgv() (string, io.Reader) {
+	fs := flag.NewFlagSet(fmt.Sprintf("%s [file]", os.Args[0]), flag.ExitOnError)
 	vf := fs.Bool("version", false, "Display version")
-	of := fs.String("out", "", "Output file name")
 	fs.Parse(os.Args[1:])
 
 	if *vf {
@@ -18,37 +18,35 @@ func ParseArgv() string {
 		os.Exit(0)
 	}
 
-	return *of
+	args := fs.Args()
+	if len(args) == 0 {
+		return "", os.Stdin
+	}
+
+	f, err := os.Open(args[0])
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err.Error())
+		os.Exit(1)
+	}
+
+	return args[0], f
 }
 
 func main() {
-	out := ParseArgv()
+	file_name, input := ParseArgv()
 
 	var err error
-	dts, err := apidts.ConvertJsonToDts(os.Stdin)
+	dts, err := apidts.ConvertJsonToDts(input)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 		os.Exit(1)
 	}
 
-	stringized, err := apidts.StringizeDts(dts, out)
+	stringized, err := apidts.StringizeDts(dts, file_name)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 		os.Exit(1)
 	}
 
-	if out != "" {
-		f, err := os.Create(out)
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err.Error())
-			os.Exit(1)
-		}
-		_, err = f.WriteString(stringized)
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err.Error())
-			os.Exit(1)
-		}
-	} else {
-		fmt.Println(stringized)
-	}
+	fmt.Println(stringized)
 }
