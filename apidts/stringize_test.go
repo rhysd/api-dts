@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func convertThenStringize(s string) (string, error) {
+func convertThenStringizeWithHint(s string, h string) (string, error) {
 	reader := strings.NewReader(s)
 	var e error
 
@@ -16,12 +16,16 @@ func convertThenStringize(s string) (string, error) {
 		return "", e
 	}
 
-	r, e := StringizeDts(d, "")
+	r, e := StringizeDts(d, h)
 	if e != nil {
 		return "", e
 	}
 
 	return r, nil
+}
+
+func convertThenStringize(s string) (string, error) {
+	return convertThenStringizeWithHint(s, "")
 }
 
 func testCompileWithTsc(s string) error {
@@ -45,6 +49,25 @@ func testCompileWithTsc(s string) error {
 	}
 
 	return nil
+}
+
+func TestCamelize(t *testing.T) {
+	check := func(input string, expected string) {
+		actual := camelize(input)
+		if actual != expected {
+			t.Errorf("camelize() should modify %s to %s but actually %s", input, expected, actual)
+		}
+	}
+	check("aaa", "Aaa")
+	check(".aaa", "Aaa")
+	check("aaa-bbb", "AaaBbb")
+	check("foo_bar", "FooBar")
+	check("aaa-$-bbb", "AaaBbb")
+	check("tsura poyo", "TsuraPoyo")
+	check("aAa-BbB", "AAaBbB")
+	check("UhhNyaa", "UhhNyaa")
+	check("-", "")
+	check("", "")
 }
 
 func TestStringizeDts(t *testing.T) {
@@ -94,12 +117,24 @@ func TestStringizeDts(t *testing.T) {
 		t.Errorf("Can't convert 'true' to interface but error does't occur")
 	}
 
+	if _, e := convertThenStringize("true"); strings.Index(e.Error(), "Invalid type token: ") != 0 {
+		t.Errorf("Returned error must be StringizeError")
+	}
+
 	if _, e := convertThenStringize("42"); e == nil {
 		t.Errorf("Can't convert 'true' to interface but error does't occur")
 	}
 
 	if _, e := convertThenStringize("null"); e == nil {
 		t.Errorf("Can't convert 'true' to interface but error does't occur")
+	}
+
+	hinted, e := convertThenStringizeWithHint(`{"aaa": 0}`, "foo")
+	if e != nil {
+		t.Errorf("Can't convert with hint")
+	}
+	if strings.Index(hinted, "Foo") == -1 {
+		t.Errorf("Hint 'foo' does not reflect to result: %s", hinted)
 	}
 
 	testCompileWithTsc(`{"foo": "aaa", "bar": {"poyo": [true, false, true], "puyo": {"aaa": 42}}}`)
