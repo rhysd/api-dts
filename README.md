@@ -5,10 +5,10 @@
 `api-dts` is a generator for TypeScript programmer who use some JSON APIs.  API response JSON has too many fields to write the type definition for it manually.  `api-dts` generates such an annoying type definition automatically.
 
 ```
-$ api-dts < response.json > api.d.ts
+$ api-dts -out api.d.ts < response.json
 ```
 
-`api-dts` simply reads STDIN and writes result to STDOUT.
+`api-dts` simply reads STDIN and writes result to the file specified with `-out`.  If `-out` is omitted, `api-dts` writes result to STDOUT.  `api-dts` defines interface name of the API from the specified file name, so specifying `-out` prefers to redirecting to file.
 You can install `api-dts` with `go get`.
 
 ```
@@ -40,10 +40,10 @@ Assume that below JSON is API response.
 ]
 ```
 
-`api-dts` generates below type definition.
+`$ api-dts -out my-api.d.ts < response.json` generates below type definition.
 
 ```typescript
-interface FixMe  {
+interface MyApi {
   user: {
     age: number;
     lang: string;
@@ -52,8 +52,6 @@ interface FixMe  {
   progress: boolean;
 }
 ```
-
-You can save it to `{api}.d.ts` and rename `FixMe` to the name of API.
 
 ## TODO
 
