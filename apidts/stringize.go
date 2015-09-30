@@ -3,6 +3,8 @@ package apidts
 import (
 	"bytes"
 	"fmt"
+	"strings"
+	"unicode"
 )
 
 type StringizeError struct {
@@ -11,6 +13,24 @@ type StringizeError struct {
 
 func (e *StringizeError) Error() string {
 	return fmt.Sprintf("Invalid type token: Input must be object or array of object but token was %s", e.token)
+}
+
+func camelize(str string) string {
+	buf := new(bytes.Buffer)
+	heading := true
+	for _, c := range str {
+		if unicode.IsLetter(c) || unicode.IsDigit(c) {
+			if heading {
+				heading = false
+				buf.WriteRune(unicode.ToUpper(c))
+			} else {
+				buf.WriteRune(c)
+			}
+		} else {
+			heading = true
+		}
+	}
+	return buf.String()
 }
 
 // TODO: Add indent string customization
@@ -67,9 +87,9 @@ func (s *DtsStringizer) visit(dts *TypeScriptDef) {
 	}
 }
 
-func (s *DtsStringizer) Stringize(dts *TypeScriptDef) (string, error) {
+func (s *DtsStringizer) Stringize(dts *TypeScriptDef, hint string) (string, error) {
 	if dts.token == TypeArray {
-		return s.Stringize(dts.elem_type)
+		return s.Stringize(dts.elem_type, hint)
 	}
 
 	if dts.token != TypeObject {
@@ -77,14 +97,24 @@ func (s *DtsStringizer) Stringize(dts *TypeScriptDef) (string, error) {
 	}
 
 	s.writeIndent()
-	s.write("interface FixMe")
+	s.write("interface ")
+	if hint != "" {
+		idx := strings.IndexRune(hint, '.')
+		if idx == -1 {
+			s.write(camelize(hint))
+		} else {
+			s.write(camelize(hint[:idx]))
+		}
+	} else {
+		s.write("FixMe")
+	}
 	s.visit(dts)
 	return s.buffer.String(), nil
 }
 
-func StringizeDts(dts *TypeScriptDef) (string, error) {
+func StringizeDts(dts *TypeScriptDef, hint string) (string, error) {
 	s := NewDtsStringizer()
-	r, err := (&s).Stringize(dts)
+	r, err := (&s).Stringize(dts, hint)
 	if err != nil {
 		return "", err
 	}

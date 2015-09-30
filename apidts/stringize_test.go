@@ -16,7 +16,7 @@ func convertThenStringize(s string) (string, error) {
 		return "", e
 	}
 
-	r, e := StringizeDts(d)
+	r, e := StringizeDts(d, "")
 	if e != nil {
 		return "", e
 	}
