@@ -40,10 +40,10 @@ Assume that below JSON is API response.
 ]
 ```
 
-`$ api-dts my-api.json > my-api.d.ts` generates below type definition.
+`$ api-dts my-api-user.json > my-api.d.ts` generates below type definition.
 
 ```typescript
-interface MyApi {
+interface MyApiUser {
   user: {
     age: number;
     lang: string;
