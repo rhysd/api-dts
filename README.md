@@ -1,6 +1,7 @@
 `d.ts` generator using JSON API response
 ========================================
 [![Build Status](https://travis-ci.org/rhysd/api-dts.svg)](https://travis-ci.org/rhysd/api-dts)
+[![Coverage Status](https://coveralls.io/repos/rhysd/api-dts/badge.svg?branch=master&service=github)](https://coveralls.io/github/rhysd/api-dts?branch=master)
 
 `api-dts` is a generator for TypeScript programmer who use some JSON APIs.  API response JSON has too many fields to write the type definition for it manually.  `api-dts` generates such an annoying type definition automatically.
 

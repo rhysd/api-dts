@@ -1,5 +1,11 @@
 language: go
 go: tip
 sudo: false
+before_install:
+  - go get github.com/axw/gocov/gocov
+  - go get github.com/mattn/goveralls
+  - if ! go get code.google.com/p/go.tools/cmd/cover; then go get golang.org/x/tools/cmd/cover; fi
 install: npm install -g typescript
-script: go test -v ./apidts
+script:
+    - go test -coverprofile=coverage.out ./apidts
+    - $HOME/gopath/bin/goveralls -coverprofile coverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
