@@ -61,6 +61,162 @@ interface MyApi {
 
 ## Real World Example
 
+In general, API document shows an example response.  You can simply copy it.
+
+For example, below is `GET users/show` Twitter API response shown in [document](https://dev.twitter.com/rest/reference/get/users/show).  Assume that you copied it as `twitter-user.json`.
+
+```json
+{
+  "contributors_enabled": false,
+  "created_at": "Sat Dec 14 04:35:55 +0000 2013",
+  "default_profile": false,
+  "default_profile_image": false,
+  "description": "Developer and Platform Relations @Twitter. We are developer advocates. We can't answer all your questions, but we listen to all of them!",
+  "entities": {
+    "description": {
+      "urls": []
+    },
+    "url": {
+      "urls": [
+        {
+          "display_url": "dev.twitter.com",
+          "expanded_url": "https://dev.twitter.com/",
+          "indices": [
+            0,
+            23
+          ],
+          "url": "https://t.co/66w26cua1O"
+        }
+      ]
+    }
+  },
+  "favourites_count": 757,
+  "follow_request_sent": false,
+  "followers_count": 143916,
+  "following": false,
+  "friends_count": 1484,
+  "geo_enabled": true,
+  "id": 2244994945,
+  "id_str": "2244994945",
+  "is_translation_enabled": false,
+  "is_translator": false,
+  "lang": "en",
+  "listed_count": 516,
+  "location": "Internet",
+  "name": "TwitterDev",
+  "notifications": false,
+  "profile_background_color": "FFFFFF",
+  "profile_background_image_url": "http://abs.twimg.com/images/themes/theme1/bg.png",
+  "profile_background_image_url_https": "https://abs.twimg.com/images/themes/theme1/bg.png",
+  "profile_background_tile": false,
+  "profile_banner_url": "https://pbs.twimg.com/profile_banners/2244994945/1396995246",
+  "profile_image_url": "http://pbs.twimg.com/profile_images/530814764687949824/npQQVkq8_normal.png",
+  "profile_image_url_https": "https://pbs.twimg.com/profile_images/530814764687949824/npQQVkq8_normal.png",
+  "profile_link_color": "0084B4",
+  "profile_location": null,
+  "profile_sidebar_border_color": "FFFFFF",
+  "profile_sidebar_fill_color": "DDEEF6",
+  "profile_text_color": "333333",
+  "profile_use_background_image": false,
+  "protected": false,
+  "screen_name": "TwitterDev",
+  "status": {
+    "contributors": null,
+    "coordinates": null,
+    "created_at": "Fri Jun 12 19:50:18 +0000 2015",
+    "entities": {
+      "hashtags": [],
+      "symbols": [],
+      "urls": [
+        {
+          "display_url": "github.com/twitterdev/twi\u2026",
+          "expanded_url": "https://github.com/twitterdev/twitter-for-bigquery",
+          "indices": [
+            36,
+            59
+          ],
+          "url": "https://t.co/K5orgXzhOM"
+        }
+      ],
+      "user_mentions": [
+        {
+          "id": 18518601,
+          "id_str": "18518601",
+          "indices": [
+            3,
+            13
+          ],
+          "name": "William Vambenepe",
+          "screen_name": "vambenepe"
+        }
+      ]
+    },
+    "favorite_count": 0,
+    "favorited": false,
+    "geo": null,
+    "id": 609447655429787648,
+    "id_str": "609447655429787648",
+    "in_reply_to_screen_name": null,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "lang": "en",
+    "place": null,
+    "possibly_sensitive": false,
+    "retweet_count": 19,
+    "retweeted": false,
+    "retweeted_status": {
+      "contributors": null,
+      "coordinates": null,
+      "created_at": "Fri Jun 12 05:19:11 +0000 2015",
+      "entities": {
+        "hashtags": [],
+        "symbols": [],
+        "urls": [
+          {
+            "display_url": "github.com/twitterdev/twi\u2026",
+            "expanded_url": "https://github.com/twitterdev/twitter-for-bigquery",
+            "indices": [
+              21,
+              44
+            ],
+            "url": "https://t.co/K5orgXzhOM"
+          }
+        ],
+        "user_mentions": []
+      },
+      "favorite_count": 23,
+      "favorited": false,
+      "geo": null,
+      "id": 609228428915552257,
+      "id_str": "609228428915552257",
+      "in_reply_to_screen_name": null,
+      "in_reply_to_status_id": null,
+      "in_reply_to_status_id_str": null,
+      "in_reply_to_user_id": null,
+      "in_reply_to_user_id_str": null,
+      "lang": "en",
+      "place": null,
+      "possibly_sensitive": false,
+      "retweet_count": 19,
+      "retweeted": false,
+      "source": "<a>Twitter Web Client</a>",
+      "text": "Twitter for BigQuery https://t.co/K5orgXzhOM See how easy it is to stream Twitter data into BigQuery.",
+      "truncated": false
+    },
+    "source": "<a>Twitter for iPhone</a>",
+    "text": "RT @vambenepe: Twitter for BigQuery https://t.co/K5orgXzhOM See how easy it is to stream Twitter data into BigQuery.",
+    "truncated": false
+  },
+  "statuses_count": 1279,
+  "time_zone": "Pacific Time (US & Canada)",
+  "url": "https://t.co/66w26cua1O",
+  "utc_offset": -25200,
+  "verified": true
+}
+```
+
 Below is a response from Twitter API
 
 ```json
@@ -465,303 +621,139 @@ Below is a response from Twitter API
 Then execute
 
 ```
-$ api-dts home-timeline.json
+$ api-dts twitter-user.json > twitter-user.d.ts
 ```
 
-It outputs type definition for the API.  You can save it to `twitter-api.d.ts`.
+It writes type definition to `twitter-user.d.ts` for the API as below.
 
 ```typescript
-interface HomeTimeline {
-  in_reply_to_status_id: any;
-  extended_entities: {
-    media: {
-      source_user_id_str: string;
-      source_status_id_str: string;
-      id_str: string;
-      indices: number[];
-      media_url: string;
-      media_url_https: string;
-      source_user_id: number;
-      type: string;
-      url: string;
-      expanded_url: string;
-      source_status_id: number;
-      id: number;
-      sizes: {
-        medium: {
-          h: number;
-          resize: string;
-          w: number;
-        };
-        small: {
-          h: number;
-          resize: string;
-          w: number;
-        };
-        thumb: {
-          resize: string;
-          w: number;
-          h: number;
-        };
-        large: {
-          h: number;
-          resize: string;
-          w: number;
-        };
-      };
-      display_url: string;
-    }[];
-  };
-  contributors: any;
-  timestamp_ms: string;
-  user: {
-    profile_background_image_url: string;
-    profile_background_image_url_https: string;
-    profile_link_color: string;
-    profile_sidebar_fill_color: string;
-    favourites_count: number;
-    screen_name: string;
-    contributors_enabled: boolean;
-    default_profile_image: boolean;
-    id_str: string;
-    listed_count: number;
-    time_zone: string;
-    url: any;
-    default_profile: boolean;
-    profile_use_background_image: boolean;
-    profile_sidebar_border_color: string;
-    is_translator: boolean;
-    follow_request_sent: any;
-    location: string;
-    profile_image_url: string;
-    friends_count: number;
-    geo_enabled: boolean;
-    profile_background_tile: boolean;
-    utc_offset: number;
-    profile_background_color: string;
-    name: string;
-    profile_image_url_https: string;
-    statuses_count: number;
-    lang: string;
-    description: string;
-    following: any;
-    protected: boolean;
-    followers_count: number;
-    profile_banner_url: string;
-    verified: boolean;
-    profile_text_color: string;
-    id: number;
-    notifications: any;
-    created_at: string;
-  };
-  is_quote_status: boolean;
-  in_reply_to_screen_name: any;
-  possibly_sensitive: boolean;
-  in_reply_to_user_id: any;
-  retweeted_status: {
-    contributors: any;
-    entities: {
-      symbols: any[];
-      urls: any[];
-      user_mentions: any[];
-      hashtags: any[];
-      media: {
-        id: number;
-        id_str: string;
-        indices: number[];
-        type: string;
-        media_url_https: string;
-        media_url: string;
-        url: string;
-        display_url: string;
-        expanded_url: string;
-        sizes: {
-          thumb: {
-            resize: string;
-            w: number;
-            h: number;
-          };
-          large: {
-            resize: string;
-            w: number;
-            h: number;
-          };
-          medium: {
-            h: number;
-            resize: string;
-            w: number;
-          };
-          small: {
-            resize: string;
-            w: number;
-            h: number;
-          };
-        };
-      }[];
-    };
-    favorited: boolean;
-    in_reply_to_screen_name: any;
-    id: number;
-    place: any;
-    in_reply_to_status_id_str: any;
-    retweeted: boolean;
-    source: string;
-    in_reply_to_user_id: any;
-    in_reply_to_user_id_str: any;
-    is_quote_status: boolean;
-    favorite_count: number;
-    extended_entities: {
-      media: {
-        indices: number[];
-        display_url: string;
-        url: string;
-        expanded_url: string;
-        id: number;
-        media_url_https: string;
-        sizes: {
-          small: {
-            h: number;
-            resize: string;
-            w: number;
-          };
-          thumb: {
-            h: number;
-            resize: string;
-            w: number;
-          };
-          large: {
-            h: number;
-            resize: string;
-            w: number;
-          };
-          medium: {
-            h: number;
-            resize: string;
-            w: number;
-          };
-        };
-        type: string;
-        id_str: string;
-        media_url: string;
-      }[];
-    };
-    retweet_count: number;
-    id_str: string;
-    coordinates: any;
-    created_at: string;
-    possibly_sensitive: boolean;
-    in_reply_to_status_id: any;
-    user: {
-      protected: boolean;
-      profile_background_tile: boolean;
-      profile_use_background_image: boolean;
-      profile_banner_url: string;
-      verified: boolean;
-      default_profile_image: boolean;
-      id_str: string;
-      follow_request_sent: any;
-      profile_sidebar_fill_color: string;
-      is_translator: boolean;
-      profile_text_color: string;
-      time_zone: any;
-      url: any;
-      geo_enabled: boolean;
-      profile_link_color: string;
-      profile_background_image_url_https: string;
-      profile_background_color: string;
-      friends_count: number;
-      favourites_count: number;
-      listed_count: number;
-      notifications: any;
-      lang: string;
-      followers_count: number;
-      profile_image_url: string;
-      id: number;
-      default_profile: boolean;
-      statuses_count: number;
-      description: string;
-      screen_name: string;
-      utc_offset: any;
-      name: string;
-      profile_sidebar_border_color: string;
-      created_at: string;
-      following: any;
-      contributors_enabled: boolean;
-      location: string;
-      profile_background_image_url: string;
-      profile_image_url_https: string;
-    };
-    truncated: boolean;
-    filter_level: string;
-    geo: any;
-    text: string;
-    lang: string;
-  };
+interface TwitterUser {
+  time_zone: string;
   created_at: string;
-  retweet_count: number;
-  favorited: boolean;
-  retweeted: boolean;
-  coordinates: any;
-  id_str: string;
-  geo: any;
+  screen_name: string;
+  following: boolean;
+  listed_count: number;
+  description: string;
   id: number;
-  text: string;
-  truncated: boolean;
-  in_reply_to_user_id_str: any;
-  source: string;
-  place: any;
-  filter_level: string;
-  in_reply_to_status_id_str: any;
-  entities: {
-    media: {
-      expanded_url: string;
-      source_status_id: number;
-      source_user_id: number;
-      id_str: string;
-      media_url_https: string;
-      display_url: string;
-      url: string;
-      media_url: string;
-      sizes: {
-        large: {
-          h: number;
-          resize: string;
-          w: number;
-        };
-        medium: {
-          h: number;
-          resize: string;
-          w: number;
-        };
-        small: {
-          h: number;
-          resize: string;
-          w: number;
-        };
-        thumb: {
-          resize: string;
-          w: number;
-          h: number;
-        };
-      };
-      id: number;
-      indices: number[];
-      source_user_id_str: string;
-      type: string;
-      source_status_id_str: string;
-    }[];
-    symbols: any[];
-    urls: any[];
-    user_mentions: {
-      id: number;
-      id_str: string;
-      indices: number[];
-      name: string;
-      screen_name: string;
-    }[];
-    hashtags: any[];
-  };
+  profile_background_color: string;
+  location: string;
+  default_profile: boolean;
+  is_translator: boolean;
+  profile_background_image_url_https: string;
+  statuses_count: number;
+  name: string;
+  profile_text_color: string;
+  contributors_enabled: boolean;
+  profile_banner_url: string;
+  profile_image_url_https: string;
+  friends_count: number;
+  profile_link_color: string;
+  geo_enabled: boolean;
+  is_translation_enabled: boolean;
+  favourites_count: number;
+  notifications: boolean;
+  profile_background_tile: boolean;
+  profile_image_url: string;
+  utc_offset: number;
+  profile_sidebar_fill_color: string;
+  protected: boolean;
+  profile_location: any;
   lang: string;
-  favorite_count: number;
+  default_profile_image: boolean;
+  id_str: string;
+  status: {
+    contributors: any;
+    id: number;
+    in_reply_to_user_id: any;
+    retweet_count: number;
+    truncated: boolean;
+    possibly_sensitive: boolean;
+    source: string;
+    geo: any;
+    place: any;
+    retweeted_status: {
+      favorite_count: number;
+      geo: any;
+      in_reply_to_status_id: any;
+      possibly_sensitive: boolean;
+      truncated: boolean;
+      created_at: string;
+      text: string;
+      entities: {
+        user_mentions: any[];
+        hashtags: any[];
+        symbols: any[];
+        urls: {
+          expanded_url: string;
+          indices: number[];
+          url: string;
+          display_url: string;
+        }[];
+      };
+      favorited: boolean;
+      in_reply_to_user_id: any;
+      retweeted: boolean;
+      in_reply_to_user_id_str: any;
+      contributors: any;
+      coordinates: any;
+      place: any;
+      retweet_count: number;
+      source: string;
+      in_reply_to_status_id_str: any;
+      lang: string;
+      id_str: string;
+      in_reply_to_screen_name: any;
+      id: number;
+    };
+    text: string;
+    retweeted: boolean;
+    created_at: string;
+    in_reply_to_status_id: any;
+    lang: string;
+    coordinates: any;
+    favorite_count: number;
+    entities: {
+      urls: {
+        display_url: string;
+        expanded_url: string;
+        indices: number[];
+        url: string;
+      }[];
+      user_mentions: {
+        id: number;
+        id_str: string;
+        indices: number[];
+        name: string;
+        screen_name: string;
+      }[];
+      hashtags: any[];
+      symbols: any[];
+    };
+    in_reply_to_screen_name: any;
+    id_str: string;
+    in_reply_to_status_id_str: any;
+    favorited: boolean;
+    in_reply_to_user_id_str: any;
+  };
+  profile_sidebar_border_color: string;
+  profile_background_image_url: string;
+  url: string;
+  entities: {
+    url: {
+      urls: {
+        expanded_url: string;
+        indices: number[];
+        url: string;
+        display_url: string;
+      }[];
+    };
+    description: {
+      urls: any[];
+    };
+  };
+  followers_count: number;
+  profile_use_background_image: boolean;
+  follow_request_sent: boolean;
+  verified: boolean;
 }
 ```
